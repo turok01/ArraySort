@@ -1,12 +1,10 @@
 package com.Igor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Main {
-    static void BubbleArraySort(ArrayList<Integer> arrayToSort){
+    static void bubbleArraySort(ArrayList<Integer> arrayToSort){
         int temp;
         for(int i = 0; i<arrayToSort.size()-1; i++){
             for(int j=0; j<arrayToSort.size()-i-1;j++){
@@ -18,7 +16,7 @@ public class Main {
             }
         }
     }
-    static void BulbArraySort(ArrayList<Integer> arrayToSort){
+    static void bulbArraySort(ArrayList<Integer> arrayToSort){
         int temp;
         boolean sorted = false;
 
@@ -35,7 +33,7 @@ public class Main {
         }
 
     }
-    static void ShakeArraySort(ArrayList<Integer> arrayToSort) {
+    static void shakeArraySort(ArrayList<Integer> arrayToSort) {
         int temp;
         boolean sorted = false;
         int i = 0;
@@ -60,7 +58,69 @@ public class Main {
             i++;
         }
     }
-
+    static void combArraySort(ArrayList<Integer> arrayToSort){
+        int temp;
+        float shrink = 1.247f;
+        int gap = arrayToSort.size();
+        boolean sorted = false;
+        while(!sorted){
+            gap /= shrink;
+            if (gap<1) {
+                gap = 1;
+                sorted = true;
+            }
+            for(int j = 0; j<arrayToSort.size()-gap; j++){
+                if(arrayToSort.get(j)>arrayToSort.get(j+gap)){
+                    temp = arrayToSort.get(j);
+                    arrayToSort.set(j,arrayToSort.get(j+gap));
+                    arrayToSort.set(j+gap,temp);
+                    sorted = false;
+                }
+            }
+        }
+    }
+    static void combIntSort(int[] arrayToSort){
+        int temp;
+        float shrink = 1.247f;
+        int gap = arrayToSort.length;
+        boolean sorted = false;
+        while(!sorted){
+            gap /= shrink;
+            if (gap<1) {
+                gap = 1;
+                sorted = true;
+            }
+            for(int j = 0; j<arrayToSort.length-gap; j++){
+                if(arrayToSort[j]>arrayToSort[j+gap]){
+                    temp = arrayToSort[j];
+                    arrayToSort[j] = arrayToSort[j+gap];
+                    arrayToSort[j+gap] = temp;
+                    sorted = false;
+                }
+            }
+        }
+    }
+    static void combIntegerSort(Integer[] arrayToSort){
+        Integer temp;
+        float shrink = 1.247f;
+        int gap = arrayToSort.length;
+        boolean sorted = false;
+        while(!sorted){
+            gap /= shrink;
+            if (gap<1) {
+                gap = 1;
+                sorted = true;
+            }
+            for(int j = 0; j<arrayToSort.length-gap; j++){
+                if(arrayToSort[j]>arrayToSort[j+gap]){
+                    temp = arrayToSort[j];
+                    arrayToSort[j] = arrayToSort[j+gap];
+                    arrayToSort[j+gap] = temp;
+                    sorted = false;
+                }
+            }
+        }
+    }
     public static void main(String[] args) {
 	// write your code here
         int arraySize;
@@ -70,7 +130,7 @@ public class Main {
         System.out.println("Input size of array:");
         arraySize = Integer.parseInt(scan.nextLine());
         System.out.println("Select type of array sorting:");
-        System.out.println("b - bubble; u - bulb while not true sorted; h - shake;");
+        System.out.println("b - bubble; u - bulb while not true sorted; h - shake; c - comb;");
         String sort = scan.nextLine();
         /*System.out.println("Input array:");
         String [] input = scan.nextLine().split(" ");
@@ -90,20 +150,56 @@ public class Main {
         switch (sort){
             case "b":
             case "B":
-                BubbleArraySort(arraySorting);
+                bubbleArraySort(arraySorting);
                 break;
             case "u":
             case "U":
-                BulbArraySort(arraySorting);
+                bulbArraySort(arraySorting);
                 break;
             case "h":
             case "H":
-                ShakeArraySort(arraySorting);
+                shakeArraySort(arraySorting);
                 break;
-
+            case "c":
+            case "C":
+                combArraySort(arraySorting);
+                break;
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Time is " + (endTime - time));
+        //Testing collections.sort sorting
+        ArrayList<Integer> arraySorting2 = new ArrayList<Integer>(arrayToSort);
+        time = System.currentTimeMillis();
+        arraySorting2.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer integer, Integer t1) {
+                return integer - t1;
+            }
+        });
+        endTime = System.currentTimeMillis();
+        System.out.println("Time .sort is " + (endTime - time));
+        //Test comb sort of primitive int
+
+        int[] arrayInt = new int[arraySize];
+        for(int i=0;i<arrayToSort.size();i++)
+            arrayInt[i]=arrayToSort.get(i);
+        time = System.currentTimeMillis();
+        combIntSort(arrayInt);
+        endTime = System.currentTimeMillis();
+        System.out.println("Time comb sort of primitive int is " + (endTime - time));
+        /*for(int i:arrayInt)
+            System.out.print(i + " ");
+
+         */
+
+        //Object[] arrayInteger = new Integer[arraySize];
+        //arrayInteger = arrayToSort.toArray();
+        Integer[] arrayInteger = new Integer[arraySize];
+        arrayInteger = arrayToSort.toArray(arrayInteger);
+        time = System.currentTimeMillis();
+        combIntegerSort(arrayInteger);
+        endTime = System.currentTimeMillis();
+        System.out.println("Time comb sort of Integer is " + (endTime - time));
 
 
         /*for(int i:arraySorting)
