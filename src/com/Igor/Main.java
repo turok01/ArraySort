@@ -121,6 +121,50 @@ public class Main {
             }
         }
     }
+    static void mergeArraySort(int[] array, int left, int right){
+        if (left >= right){
+            return;
+        }
+        int mid = (left + right) / 2;
+        mergeArraySort(array, left, mid);
+        mergeArraySort(array,mid+1, right);
+        merge(array, left, mid, right);
+    }
+    static void merge(int[] array, int left, int mid, int right){
+        int lengthLeft = mid - left + 1;
+        int lengthRight = right - mid;
+
+        int[] leftArray = new int[lengthLeft];
+        int[] rightArray = new int[lengthRight];
+
+        for (int i = 0; i < lengthLeft; i++){
+            leftArray[i] = array[i + left];
+        }
+        for (int i = 0; i < lengthRight; i++){
+            rightArray[i] = array[mid + i + 1];
+        }
+
+        int leftIndex = 0;
+        int rightIndex = 0;
+        for (int i = left; i < right + 1; i++){
+            //if left and right part of array both have items
+            if(leftIndex < lengthLeft && rightIndex < lengthRight){
+                if(leftArray[leftIndex] < rightArray[rightIndex]){
+                    array[i] = leftArray[leftIndex++];
+                }
+                else{
+                    array[i] = rightArray[rightIndex++];
+                }
+            }
+            else
+                //copy what's left in left xor right part of array
+                if (leftIndex < lengthLeft)
+                    array[i] = leftArray[leftIndex++];
+                else
+                    if (rightIndex < lengthRight)
+                        array[i] = rightArray[rightIndex++];
+        }
+    }
     public static void main(String[] args) {
 	// write your code here
         int arraySize;
@@ -130,7 +174,7 @@ public class Main {
         System.out.println("Input size of array:");
         arraySize = Integer.parseInt(scan.nextLine());
         System.out.println("Select type of array sorting:");
-        System.out.println("b - bubble; u - bulb while not true sorted; h - shake; c - comb;");
+        System.out.println("b - bubble; u - bulb while not true sorted; h - shake; c - comb; m - merge int;");
         String sort = scan.nextLine();
         /*System.out.println("Input array:");
         String [] input = scan.nextLine().split(" ");
@@ -164,6 +208,14 @@ public class Main {
             case "C":
                 combArraySort(arraySorting);
                 break;
+            case "m":
+            case "M":
+                int[] arrayMergeInt = new int[arraySize];
+                for(int i=0;i<arrayToSort.size();i++)
+                    arrayMergeInt[i]=arrayToSort.get(i);
+                time = System.currentTimeMillis();
+                mergeArraySort(arrayMergeInt,0,arrayMergeInt.length-1);
+                break;
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Time is " + (endTime - time));
@@ -187,6 +239,15 @@ public class Main {
         combIntSort(arrayInt);
         endTime = System.currentTimeMillis();
         System.out.println("Time comb sort of primitive int is " + (endTime - time));
+
+        int[] arrayIntDotSort = new int[arraySize];
+        for(int i=0;i<arrayToSort.size();i++)
+            arrayIntDotSort[i]=arrayToSort.get(i);
+        time = System.currentTimeMillis();
+        Arrays.sort(arrayIntDotSort);
+        endTime = System.currentTimeMillis();
+        System.out.println("Time .sort of primitive int is " + (endTime - time));
+
         /*for(int i:arrayInt)
             System.out.print(i + " ");
 
