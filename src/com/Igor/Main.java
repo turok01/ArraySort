@@ -165,6 +165,73 @@ public class Main {
                         array[i] = rightArray[rightIndex++];
         }
     }
+    public static void mergeSortCodeFlow(int[]a, int n) {
+        if (n < 2) {
+            return;
+        }
+        int mid = n/2;
+        int[]l = new int[mid];
+        int[]r = new int[n - mid];
+
+        for (int i = 0; i < mid; i++) {
+            l[i]= a[i];
+        }
+        for (int i = mid; i < n; i++) {
+            r[i - mid]= a[i];
+        }
+        mergeSortCodeFlow(l, mid);
+        mergeSortCodeFlow(r, n - mid);
+
+        mergeCodeFlow(a, l, r, mid, n - mid);
+    }
+    public static void mergeCodeFlow(
+            int[]a, int[]l, int[]r, int left, int right) {
+
+        int i = 0, j = 0, k = 0;
+        while (i < left && j < right) {
+            if (l[i]<= r[j]) {
+                a[k++]= l[i++];
+            }
+            else {
+                a[k++]= r[j++];
+            }
+        }
+        while (i < left) {
+            a[k++]= l[i++];
+        }
+        while (j < right) {
+            a[k++]= r[j++];
+        }
+    }
+    static void myMergeArraySort (int[] a, int len){
+        if (len < 2)
+            return;
+        int mid = len / 2;
+        int[] l = new int[mid];
+        int [] r = new int [len - mid];
+        for(int i = 0; i < mid; i++)
+            l[i] = a[i];
+        for(int i = 0; i < len - mid; i++)
+            r[i] = a[i + mid ];
+        myMergeArraySort(l,mid);
+        myMergeArraySort(r,len-mid);
+        myMerge(a, l, r, mid,len-mid);
+    }
+    static void myMerge(int[] ar, int[] l, int[] r, int lSize, int rSize){
+        int lIndex = 0, rIndex = 0, k = 0;
+        while(lIndex<lSize && rIndex<rSize)
+            if (l[lIndex] < r[rIndex])
+                ar[k++] = l[lIndex++];
+            else
+                ar[k++] = r[rIndex++];
+
+        while(lIndex<lSize)
+            ar[k++]=l[lIndex++];
+
+        while(rIndex<rSize)
+            ar[k++]=r[rIndex++];
+
+    }
     public static void main(String[] args) {
 	// write your code here
         int arraySize;
@@ -174,7 +241,7 @@ public class Main {
         System.out.println("Input size of array:");
         arraySize = Integer.parseInt(scan.nextLine());
         System.out.println("Select type of array sorting:");
-        System.out.println("b - bubble; u - bulb while not true sorted; h - shake; c - comb; m - merge int;");
+        System.out.println("b - bubble; u - bulb while not true sorted; h - shake; c - comb; m - merge int; f - my merge realisation");
         String sort = scan.nextLine();
         /*System.out.println("Input array:");
         String [] input = scan.nextLine().split(" ");
@@ -189,7 +256,7 @@ public class Main {
         }
         scan.close();
         arraySorting = new ArrayList<Integer>(arrayToSort);
-
+        int[] arrayMergeInt = new int[arraySize];
         long time = System.currentTimeMillis();
         switch (sort){
             case "b":
@@ -210,12 +277,20 @@ public class Main {
                 break;
             case "m":
             case "M":
-                int[] arrayMergeInt = new int[arraySize];
+                //arrayMergeInt = new int[arraySize];
                 for(int i=0;i<arrayToSort.size();i++)
                     arrayMergeInt[i]=arrayToSort.get(i);
                 time = System.currentTimeMillis();
                 mergeArraySort(arrayMergeInt,0,arrayMergeInt.length-1);
                 break;
+            case "f":
+                //arrayMergeInt = new int[arraySize];
+                for(int i=0;i<arrayToSort.size();i++)
+                    arrayMergeInt[i]=arrayToSort.get(i);
+                time = System.currentTimeMillis();
+                myMergeArraySort(arrayMergeInt,arrayMergeInt.length);
+                break;
+
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Time is " + (endTime - time));
